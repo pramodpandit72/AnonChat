@@ -1,0 +1,40 @@
+Build a project name"AnonChat" where user can share their daily life thought, feeling, experience, and emotion with others.
+User have to create account, login and signup, user id; 
+No body can see user id, name, email, phone number, address, and other personal information;
+keep user anonymous,for other users
+
+user should do:
+Comments — Should users be able to comment on posts anonymously? (not in your description but would add engagement)
+Categories — I'm planning: thought, feeling, experience, emotion, rant, gratitude, advice — sound good?
+Anonymous avatars — Should each user get a random avatar (animal/emoji) that's persistent or changes each session?
+
+
+
+make proper navigation bar, footer, and responsive design;
+make it production leven project;
+user sky bule and green color and more professional colors and design;
+make it professional and modern design;
+it should also work on mobile phone, tablet, and desktop;
+Make it user friendly and easy to use;
+Make it fast and responsive;
+Make it secure and reliable;
+Make it scalable and maintainable;
+Make it production leven project;
+Make it SEO friendly;
+
+
+
+technology use:-
+Javaspringboot for backend;
+mongodbatlas for database;
+React for frontend;
+JWT for authentication;
+bcrypt for password encryption;
+
+I have given the mongodb_uri in the below;
+
+--> After creating verify the website working and also verify every single feature;
+
+
+
+Mongodb_uri: mongodb+srv://nwdankit701_db_user:XZPV4vp3AtFERptv@anonchat-cluster.xrlwk3v.mongodb.net/?appName=AnonChat-Cluster
