@@ -38,3 +38,27 @@ I have given the mongodb_uri in the below;
 
 
 Mongodb_uri: mongodb+srv://nwdankit701_db_user:XZPV4vp3AtFERptv@anonchat-cluster.xrlwk3v.mongodb.net/?appName=AnonChat-Cluster
+
+
+frontend: https://anon-chat-inky-nu.vercel.app/
+backend: https://anonchat-3mel.onrender.com
+
+.\mvnw spring-boot:run
+
+to free port: netstat -ano | findstr :8080
+
+taskkill /PID 1234 /F
+
+
+---
+env var:
+for render:->
+CORS_ORIGINS=https://anon-chat-inky-nu.vercel.app/
+JWT_EXPIRATION=86400000
+JWT_SECRET=AnonChatSuperSecretKey2026ForJWTTokenGenerationAndValidationMustBe256BitsLong!!
+MONGODB_DATABASE=anonchat
+MONGODB_URI="mongodb+srv://nwdankit701_db_user:XZPV4vp3AtFERptv@anonchat-cluster.xrlwk3v.mongodb.net/anonchat?retryWrites=true&w=majority&appName=AnonChat-Cluster"
+PORT=8080
+
+For vercel: -->
+VITE_API_URL=https://anonchat-3mel.onrender.com
