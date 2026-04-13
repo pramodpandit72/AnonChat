@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: anonchat-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - MONGODB_URI=mongodb+srv://nwdankit701_db_user:XZPV4vp3AtFERptv@anonchat-cluster.xrlwk3v.mongodb.net/anonchat?retryWrites=true&w=majority&appName=AnonChat-Cluster
+      - MONGODB_DATABASE=anonchat
+      - JWT_SECRET=AnonChatSuperSecretKey2026ForJWTTokenGenerationAndValidationMustBe256BitsLong!!
+      - JWT_EXPIRATION=86400000
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+    restart: unless-stopped
+    networks:
+      - anonchat-network
+
+networks:
+  anonchat-network:
+    driver: bridge
