@@ -1,0 +1,2 @@
+# Ignore application.properties containing sensitive info
+backend/src/main/resources/application.properties
