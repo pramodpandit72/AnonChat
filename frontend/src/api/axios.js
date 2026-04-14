@@ -24,9 +24,7 @@ API.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('anonchat_token');
-      if (window.location.pathname !== '/login' && window.location.pathname !== '/signup' && window.location.pathname !== '/') {
-        window.location.href = '/login';
-      }
+      window.dispatchEvent(new CustomEvent('anonchat:unauthorized'));
     }
     return Promise.reject(error);
   }

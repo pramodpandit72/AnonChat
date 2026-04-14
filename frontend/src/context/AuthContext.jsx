@@ -27,6 +27,15 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+
+    window.addEventListener('anonchat:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('anonchat:unauthorized', handleUnauthorized);
+  }, []);
+
   const showToast = (message, type = 'info') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 4000);

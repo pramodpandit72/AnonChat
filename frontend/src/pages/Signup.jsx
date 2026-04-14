@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/auth.css';
@@ -10,10 +10,13 @@ function Signup() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  if (isAuthenticated) {
-    navigate('/feed');
-    return null;
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/feed', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (isAuthenticated) return null;
 
   const validate = () => {
     const errs = {};
