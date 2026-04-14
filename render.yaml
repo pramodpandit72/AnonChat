@@ -1,0 +1,22 @@
+# Render Blueprint - https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: anonchat-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: MONGODB_URI
+        sync: false  # Set this manually in Render dashboard
+      - key: MONGODB_DATABASE
+        value: anonchat
+      - key: JWT_SECRET
+        sync: false  # Set this manually in Render dashboard
+      - key: JWT_EXPIRATION
+        value: 86400000
+      - key: CORS_ORIGINS
+        sync: false  # Set this manually - add your Vercel frontend URL
