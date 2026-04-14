@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getPosts, getTrendingPosts } from '../api/axios';
 import PostCard from '../components/PostCard';
 import CreatePost from '../components/CreatePost';
@@ -18,41 +18,81 @@ function Feed() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeMood, setActiveMood] = useState('all');
   const [filterType, setFilterType] = useState('category');
+  const postsAbortRef = useRef(null);
+  const trendingAbortRef = useRef(null);
+  const initialLoadDoneRef = useRef(false);
 
   const loadPosts = useCallback(async (pageNum = 0, append = false) => {
+    if (postsAbortRef.current) {
+      postsAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    postsAbortRef.current = controller;
+
     try {
       if (pageNum === 0) setLoading(true);
       else setLoadingMore(true);
 
       const category = activeCategory !== 'all' ? activeCategory : '';
       const mood = activeMood !== 'all' ? activeMood : '';
-      const res = await getPosts(pageNum, 10, category, mood);
+      const res = await getPosts(pageNum, 10, category, mood, { signal: controller.signal });
       
       const newPosts = res.data.content;
       setPosts(prev => append ? [...prev, ...newPosts] : newPosts);
       setHasMore(!res.data.last);
       setPage(pageNum);
     } catch (err) {
+      if (err.code === 'ERR_CANCELED') return;
       console.error('Failed to load posts', err);
     } finally {
-      setLoading(false);
-      setLoadingMore(false);
+      if (!controller.signal.aborted) {
+        setLoading(false);
+        setLoadingMore(false);
+      }
     }
   }, [activeCategory, activeMood]);
 
-  const loadTrending = async () => {
-    try {
-      const res = await getTrendingPosts();
-      setTrending(res.data);
-    } catch (err) {
-      console.log('No trending posts yet');
+  useEffect(() => {
+    if (!initialLoadDoneRef.current) {
+      initialLoadDoneRef.current = true;
+      loadPosts(0);
+      return;
     }
-  };
+
+    const debounceTimer = setTimeout(() => {
+      loadPosts(0);
+    }, 250);
+
+    return () => clearTimeout(debounceTimer);
+  }, [loadPosts]);
 
   useEffect(() => {
-    loadPosts(0);
+    const controller = new AbortController();
+    trendingAbortRef.current = controller;
+
+    const loadTrending = async () => {
+      try {
+        const res = await getTrendingPosts({ signal: controller.signal });
+        setTrending(res.data);
+      } catch (err) {
+        if (err.code === 'ERR_CANCELED') return;
+        console.log('No trending posts yet');
+      }
+    };
+
     loadTrending();
-  }, [loadPosts]);
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (postsAbortRef.current) postsAbortRef.current.abort();
+      if (trendingAbortRef.current) trendingAbortRef.current.abort();
+    };
+  }, []);
 
   const handlePostCreated = (newPost) => {
     setPosts(prev => [newPost, ...prev]);

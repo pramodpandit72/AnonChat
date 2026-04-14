@@ -35,13 +35,13 @@ export const signup = (data) => API.post('/auth/signup', data);
 export const login = (data) => API.post('/auth/login', data);
 
 // Posts
-export const getPosts = (page = 0, size = 10, category = '', mood = '') => {
+export const getPosts = (page = 0, size = 10, category = '', mood = '', config = {}) => {
   const params = new URLSearchParams({ page, size });
   if (category) params.append('category', category);
   if (mood) params.append('mood', mood);
-  return API.get(`/posts?${params}`);
+  return API.get(`/posts?${params}`, config);
 };
-export const getTrendingPosts = () => API.get('/posts/trending');
+export const getTrendingPosts = (config = {}) => API.get('/posts/trending', config);
 export const getPostById = (id) => API.get(`/posts/${id}`);
 export const getMyPosts = (page = 0, size = 10) => API.get(`/posts/my?page=${page}&size=${size}`);
 export const createPost = (data) => API.post('/posts', data);
